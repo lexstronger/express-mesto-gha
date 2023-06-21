@@ -1,6 +1,5 @@
 const Card = require('../models/card');
 const {
-  OK,
   CREATED,
   BAD_REQUEST,
   NOT_FOUND,
@@ -9,7 +8,7 @@ const {
 
 const getCards = (req, res) => {
   Card.find({})
-    .then((cards) => res.status(OK).send(cards))
+    .then((cards) => res.send(cards))
     .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' }));
 };
 
@@ -20,7 +19,7 @@ const createCard = (req, res) => {
     .then((card) => res.status(CREATED).send({ card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные', error: err.message });
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
@@ -38,7 +37,7 @@ const deleteCardById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные', error: err.message });
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
@@ -60,7 +59,7 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при постановке лайка', error: err.message });
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при постановке лайка' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
@@ -82,7 +81,7 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при снятии лайка', error: err.message });
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при снятии лайка' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
