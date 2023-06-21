@@ -1,5 +1,6 @@
 const Card = require('../models/card');
 const {
+  OK,
   CREATED,
   BAD_REQUEST,
   NOT_FOUND,
@@ -8,7 +9,7 @@ const {
 
 const getCards = (req, res) => {
   Card.find({})
-    .then((cards) => res.status(CREATED).send(cards))
+    .then((cards) => res.status(OK).send(cards))
     .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' }));
 };
 
