@@ -33,7 +33,7 @@ const deleteCardById = (req, res) => {
       if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена.' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.send({ card });
       }
     })
     .catch((err) => {
@@ -55,7 +55,7 @@ const likeCard = (req, res) => {
       if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена.' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.send({ card });
       }
     })
     .catch((err) => {
@@ -77,7 +77,7 @@ const dislikeCard = (req, res) => {
       if (!card) {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена.' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.send({ card });
       }
     })
     .catch((err) => {
