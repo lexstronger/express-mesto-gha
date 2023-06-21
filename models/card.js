@@ -4,8 +4,8 @@ const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minLength: 2,
-    maxLength: 30,
+    minlength: 2,
+    maxlength: 30,
   },
   link: {
     type: String,
@@ -16,11 +16,11 @@ const cardSchema = new mongoose.Schema({
     required: true,
     ref: 'user',
   },
-  likes: {
+  likes: [{
     type: mongoose.Schema.Types.ObjectId,
     default: [],
     ref: 'user',
-  },
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
