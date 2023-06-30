@@ -62,6 +62,7 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .select('+password')
+    .orFail
     .then((user) => bcrypt.compare(password, user.password)
       .then((matched) => {
         if (matched) {
