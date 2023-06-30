@@ -69,15 +69,11 @@ const login = (req, res, next) => {
     .orFail
     .then((user) => bcrypt.compare(password, user.password)
       .then((matched) => {
-        if (matched) {
-          const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-          res.cookie('jwtToken', token, {
-            maxAge: 3600,
-            httpOnly: true,
-          });
-          return res.send({ jwtToken: token });
+        if (!matched) {
+          throw new AuthorizationError('Введены неверные email или пароль');
         }
-        throw new AuthorizationError('Введены неверные email или пароль');
+        const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+        res.send({ _id: token });
       }))
     .catch((err) => {
       if (err.name === 'LoginError') {
