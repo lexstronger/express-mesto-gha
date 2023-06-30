@@ -5,6 +5,10 @@ const BadRequestError = require('../utils/errors/BadRequestError');
 const AuthorizationError = require('../utils/errors/AuthorizationError');
 const NotFoundError = require('../utils/errors/NotFoundError');
 const ConflictError = require('../utils/errors/ConflictError');
+const {
+  SUCCESS,
+  CREATED,
+} = require('../utils/constants');
 
 const dataUser = (user) => ({
   name: user.name,
@@ -17,7 +21,7 @@ const dataUser = (user) => ({
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.send(users.map((user) => dataUser(user)));
+      res.status(SUCCESS).send(users.map((user) => dataUser(user)));
     })
     .catch(next);
 };
@@ -28,7 +32,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send(dataUser(user));
+        res.status(SUCCESS).send(dataUser(user));
       }
     })
     .catch((err) => {
@@ -46,7 +50,7 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => res.send(dataUser(user))))
+      .then((user) => res.status(CREATED).send(dataUser(user))))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Введены некорректные данные'));
@@ -87,7 +91,7 @@ const getProfileInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
-        res.send(dataUser(user));
+        res.status(SUCCESS).send(dataUser(user));
       } else {
         next(new NotFoundError('Пользователь не найден'));
       }
@@ -108,7 +112,7 @@ const updateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send({ user });
+        res.status(SUCCESS).send({ user });
       }
     })
     .catch((err) => {
@@ -127,7 +131,7 @@ const updateAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send({ user });
+        res.status(SUCCESS).send({ user });
       }
     })
     .catch((err) => {
