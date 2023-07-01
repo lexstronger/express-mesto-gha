@@ -29,15 +29,16 @@ const getUserById = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => {
-      if (!user) {
+      if (user) {
         res.status(SUCCESS).send(dataUser(user));
-      } else {
-        next(new NotFoundError('Пользователь не найден'));
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Введены некорректные данные'));
+      }
+      if (err.name === 'DocumentNotFoundError') {
+        return next(new NotFoundError('Пользователь не найден'));
       }
       return next(err);
     });
