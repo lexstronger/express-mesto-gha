@@ -53,11 +53,11 @@ const createUser = (req, res, next) => {
       .then((user) => res.status(CREATED).send(dataUser(user))))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Введены некорректные данные'));
+        next(new BadRequestError('Введены некорректные данные'));
       } if (err.code === 11000) {
-        return next(new ConflictError('Пользователь с таким email уже существует'));
+        next(new ConflictError('Пользователь с таким email уже существует'));
       }
-      return next(err);
+      next(err);
     })
     .catch(next);
 };
@@ -66,14 +66,13 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .select('+password')
-    .orFail
     .then((user) => bcrypt.compare(password, user.password)
       .then((matched) => {
         if (!matched) {
           throw new AuthorizationError('Введены неверные email или пароль');
         }
         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-        res.send({ _id: token });
+        res.send({ token });
       }))
     .catch((err) => {
       if (err.name === 'LoginError') {
