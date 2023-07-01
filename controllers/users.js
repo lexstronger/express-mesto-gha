@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../utils/errors/BadRequestError');
-const AuthorizationError = require('../utils/errors/AuthorizationError');
 const NotFoundError = require('../utils/errors/NotFoundError');
 const ConflictError = require('../utils/errors/ConflictError');
 const {
@@ -27,7 +26,7 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
@@ -36,9 +35,9 @@ const getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Введены некорректные данные'));
+        return next(new BadRequestError('Введены некорректные данные'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -80,22 +79,6 @@ const createUser = (req, res, next) => {
 //       }
 //       return next(err);
 //     });
-// };
-
-// const login = async (req, res, next) => {
-//   const { email, password } = req.body;
-//   try {
-//     const user = await User.findOne({ email }).select('+password').orFail(new Error('UnauthorizedError'));
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) {
-//       return next(new AuthorizationError('ff'));
-//     }
-//     const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-//     res.send({ token });
-//   } catch (error) {
-//     if (error.message === 'UnauthorizedError') return next(new AuthorizationError('aa'));
-//     return next(error);
-//   }
 // };
 
 const login = (req, res, next) => {
