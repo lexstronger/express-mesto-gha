@@ -31,14 +31,14 @@ const getUserById = (req, res, next) => {
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
-      } else {
-        res.status(SUCCESS).send(dataUser(user));
       }
+      res.status(SUCCESS).send(dataUser(user));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Введены некорректные данные'));
-      } return next(err);
+        next(new BadRequestError('Введены некорректные данные'));
+      }
+      next(err);
     });
 };
 
