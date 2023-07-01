@@ -54,10 +54,11 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Введены некорректные данные'));
-      } if (err.code === 11000) {
+      } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
+      } else {
+        next(err);
       }
-      next(err);
     })
     .catch(next);
 };
@@ -82,12 +83,7 @@ const getProfileInfo = (req, res, next) => {
         next(new NotFoundError('Пользователь не найден'));
       }
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequestError('Введены некорректные данные при изменении аватара'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const updateProfile = (req, res, next) => {

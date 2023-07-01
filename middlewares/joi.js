@@ -34,7 +34,7 @@ const profileInfoValidator = celebrate({
 
 const avatarValidator = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().regex(regexLink),
+    avatar: Joi.string().required().regex(regexLink),
   }),
 });
 

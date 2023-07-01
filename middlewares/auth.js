@@ -5,7 +5,7 @@ const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new AuthorizationError('Пользователь не прошел авторизацию'));
+    return next(new AuthorizationError('Пользователь не прошел авторизацию'));
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -14,12 +14,12 @@ const auth = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
-    next(new AuthorizationError('Пользователь не прошел авторизацию'));
+    return next(new AuthorizationError('Пользователь не прошел авторизацию'));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
 
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };
 
 module.exports = auth;
