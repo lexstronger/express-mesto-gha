@@ -62,24 +62,51 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
+// const login = (req, res, next) => {
+//   const { email, password } = req.body;
+//   User.findOne({ email })
+//     .select('+password')
+//     .then((user) => bcrypt.compare(password, user.password)
+//       .then((matched) => {
+//         if (!matched) {
+//           return next(new AuthorizationError('Введены неверные email или пароль'));
+//         }
+//         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+//         return res.send({ token });
+//       }))
+//     .catch((err) => {
+//       if (err.message === 'UnauthorizedError') {
+//         return next(new AuthorizationError('Введены неверные email или пароль'));
+//       }
+//       return next(err);
+//     });
+// };
+
+// const login = async (req, res, next) => {
+//   const { email, password } = req.body;
+//   try {
+//     const user = await User.findOne({ email }).select('+password').orFail(new Error('UnauthorizedError'));
+//     const match = await bcrypt.compare(password, user.password);
+//     if (!match) {
+//       return next(new AuthorizationError('ff'));
+//     }
+//     const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+//     res.send({ token });
+//   } catch (error) {
+//     if (error.message === 'UnauthorizedError') return next(new AuthorizationError('aa'));
+//     return next(error);
+//   }
+// };
+
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  User.findOne({ email })
-    .select('+password')
-    .then((user) => bcrypt.compare(password, user.password)
-      .then((matched) => {
-        if (!matched) {
-          throw new AuthorizationError('Введены неверные email или пароль');
-        }
-        const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-        res.send({ token });
-      }))
-    .catch((err) => {
-      if (err.name === 'LoginError') {
-        return next(new AuthorizationError('Введены неверные email или пароль'));
-      }
-      return next(err);
-    });
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      res.send({ _id: token });
+    })
+    .catch((next));
 };
 
 const getProfileInfo = (req, res, next) => {
