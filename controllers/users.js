@@ -27,8 +27,9 @@ const getUsers = (req, res, next) => {
 
 const getUserById = (req, res, next) => {
   User.findById(req.user._id)
+    .orFail()
     .then((user) => {
-      if (user) {
+      if (!user) {
         res.status(SUCCESS).send(dataUser(user));
       } else {
         next(new NotFoundError('Пользователь не найден'));
