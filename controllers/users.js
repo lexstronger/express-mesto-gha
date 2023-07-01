@@ -28,10 +28,10 @@ const getUsers = (req, res, next) => {
 const getUserById = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      if (!user) {
-        next(new NotFoundError('Пользователь не найден'));
-      } else {
+      if (user) {
         res.status(SUCCESS).send(dataUser(user));
+      } else {
+        next(new NotFoundError('Пользователь не найден'));
       }
     })
     .catch((err) => {
