@@ -62,26 +62,6 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
-// const login = (req, res, next) => {
-//   const { email, password } = req.body;
-//   User.findOne({ email })
-//     .select('+password')
-//     .then((user) => bcrypt.compare(password, user.password)
-//       .then((matched) => {
-//         if (!matched) {
-//           return next(new AuthorizationError('Введены неверные email или пароль'));
-//         }
-//         const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-//         return res.send({ token });
-//       }))
-//     .catch((err) => {
-//       if (err.message === 'UnauthorizedError') {
-//         return next(new AuthorizationError('Введены неверные email или пароль'));
-//       }
-//       return next(err);
-//     });
-// };
-
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
