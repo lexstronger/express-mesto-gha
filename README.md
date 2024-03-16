@@ -1,6 +1,7 @@
 [![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 # Проект Mesto фронтенд + бэкенд
-
+Статус: завершен ✅
+Репозиторий для приложения проекта Mesto, включающий фронтенд и бэкенд части приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями.
 
 ## Директории
 
